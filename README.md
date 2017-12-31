@@ -2,8 +2,7 @@
 
 A screen to compute and visualize combat odds for [The Ninth Age](https://the-ninth-age.com).
 
-![Screenshot](https://raw.githubusercontent.
-com/billrobertson42/ninthodds/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/billrobertson42/ninthodds/master/screenshot.png)
 
 ## Overview
 
