@@ -9,11 +9,8 @@ A screen to compute and visualize combat odds for [The Ninth Age](https://the-ni
 This is a Clojurescript/Reagent application that computes combat odds
 for version two of [The Ninth Age](https://the-ninth-age.com).
 
-This version has not reached minimum viable product (MVP) status,
-because it does not yet factor in saves when computing odds to
-wound. Assuming no saves, it does appear to correctly compute and
-display the probability all possible outcomes of a given number of
-attacks.
+This version has reached minimum viable product (MVP) status. It can
+compute basic combat odds and factor in armor and special saves.
 
 For example, given 10 attacks with equal weapon skill, and identical
 strength and resilience, What are the odds that 2 or 3 wounds will be
@@ -26,19 +23,19 @@ The program can do the following...
 * Allows you to enter number of attacks (n)
 * Allows you to enter offensive and defensive stats
 * Computes the odds of causing 0-n wounds and displays that in a graph
-* Has internal logic for rerolls (failures only)
+* Saves are considered in the wound calculation
+* Has internal logic for rerolls
 * Has internal logic for poison attacks
 * Reasonable level of responsiveness (i.e. displays OK on computer or phone)
 
 ## MVP Features (todo)
 
-* Factor in armor and special saves when computing odds to wound
 * Provide user interface elements to activate poison and reroll logic
 * Wordsmith the UI a bit
 
 ## Future Features
 
-* Figure out set of things to implement to make this a good tool for simulating unit effectiveness
+* Figure out additional feathres to make this a good tool for evaluating unit effectiveness
 * Current model is based on binomial distribution -- fine for fixed number of trials, how to expand?
 * Add shooting
 

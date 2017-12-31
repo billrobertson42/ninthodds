@@ -62,15 +62,15 @@
 
 (defn melee-attack-form []
   [:div.flex.column
-   [ui/Subheader "Offensive"]
-   [text-field "Number of attacks in unit" input/simple-number recompute-melee :melee-form :att]
+   [ui/Subheader "Offensive Stats"]
+   [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
    [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
    [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
    [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]])
 
 (defn melee-defense-form[]
   [:div.flex.column
-   [ui/Subheader "Defensive"]
+   [ui/Subheader "Defensive Stats"]
    [text-field "Defensive Skill" input/simple-number recompute-melee :melee-form :def]
    [text-field "Resilience" input/simple-number recompute-melee :melee-form :res]
    [text-field "Armor Save" input/armor-save recompute-melee :melee-form :armor]
@@ -91,7 +91,7 @@
 (defn melee-results[odds]
   (let [data (chart-data odds)]
     [:div.flex.column
-     [ui/Subheader "Odds to Wound in Melee"]
+     [ui/Subheader "Wounds in Melee"]
      [rc/BarChart {:data data :width 300 :height 250}
       [rc/XAxis {:dataKey "name"}]
       [rc/YAxis]
@@ -119,17 +119,16 @@
   (let [melee-odds (:melee-odds @app-state)]
     [ui/MuiThemeProvider theme
      [:div
-      [ui/AppBar {:title "Tell Me the Odds!"}]
+      [ui/AppBar {:title "Ninth Age Calculator"
+                  :showMenuIconButton false}]
       [panel melee-odds]
       ]
      ]
     ))
 
-(reagent/render-component [hello-world]
-                          (. js/document (getElementById "app")))
+(reagent/render-component
+ [hello-world]
+ (. js/document (getElementById "app")))
 
 (defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
-  ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
 )
