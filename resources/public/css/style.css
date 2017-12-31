@@ -1,0 +1,22 @@
+.flex {
+    display: flex;    
+}
+
+.column {
+    flex-direction: column;
+    max-width: 80%;
+    margin: 16px;
+}
+
+.wrap {
+    flex-wrap: wrap;
+}
+
+.center {
+    align-items: center;
+    justify-content: center;
+}
+
+.red {
+    background: red;
+}
