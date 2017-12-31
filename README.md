@@ -2,6 +2,9 @@
 
 A screen to compute and visualize combat odds for [The Ninth Age](https://the-ninth-age.com).
 
+![Screenshot](https://raw.githubusercontent.
+com/billrobertson42/ninthodds/master/screenshot.png)
+
 ## Overview
 
 This is a reagent application that computes combat adds for version
