@@ -20,8 +20,8 @@
 (defn base-state []
   (let [initial {:show :melee
                  :melee-form
-                 {:att "10" :off "3"  :str "3" :ap  "0"
-                  :def "3" :res "3"  :as  "6" :regen "" :aegis ""}}]
+                 {:att "10" :off "3"  :str "3" :ap  ""
+                  :def "3" :res "3"  :armor "" :special ""}}]
     (assoc initial :melee-odds (compute-melee-odds (:melee-form initial)))))
 
 (defonce app-state
@@ -73,9 +73,8 @@
    [ui/Subheader "Defensive"]
    [text-field "Defensive Skill" input/simple-number recompute-melee :melee-form :def]
    [text-field "Resilience" input/simple-number recompute-melee :melee-form :res]
-   [text-field "Armor Save" input/armor-save recompute-melee :melee-form :as]
-   [text-field "Regen Save" input/special-save recompute-melee :melee-form :regen]
-   [text-field "Aegis Save" input/special-save recompute-melee :melee-form :aegis]])
+   [text-field "Armor Save" input/armor-save recompute-melee :melee-form :armor]
+   [text-field "Special Save" input/special-save recompute-melee :melee-form :special]])
 
 (defn chart-data [odds]
   (clj->js
@@ -84,8 +83,10 @@
            :odds (* 100 o)}) odds)))
 
 (defn format-tooltip [value]
-  (let [fmt-str (cond (< value 0.001) "%.4f%" (< value 0.01) "%.3f%" :else "%.2f%")]
-    (gstr/format fmt-str value)))
+  (if (< value 0.001)
+    "< 0.001%"
+    (let [fmt-str (cond (< value 0.01) "%.3f%" :else "%.2f%")]
+      (gstr/format fmt-str value))))
 
 (defn melee-results[odds]
   (let [data (chart-data odds)]

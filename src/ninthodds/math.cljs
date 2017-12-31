@@ -1,6 +1,11 @@
 (ns ninthodds.math)
 
-(def p (into {} (map #(vector % (/ % 6)) (range 1 7))))
+(defn success [reroll-type required roll reroll]
+  (cond
+    (nil? reroll-type) (>= roll required)
+    (= reroll-type :fail) (and (>= roll required) (>= reroll required))
+    (= reroll-type :success) (or (>= roll required) (>= reroll required))
+    (number? reroll-type) (if (not= roll reroll-type) (>= roll required) (>= reroll required))))
 
 (defn clamp [n min-val max-val]
   (-> n (max min-val) (min max-val)))
