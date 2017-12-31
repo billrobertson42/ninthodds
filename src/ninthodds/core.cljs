@@ -21,7 +21,8 @@
   (let [initial {:show :melee
                  :melee-form
                  {:att "10" :off "3"  :str "3" :ap  ""
-                  :def "3" :res "3"  :armor "" :special ""}}]
+                  :def "3" :res "3"  :armor "" :special ""
+                  :poison false}}]
     (assoc initial :melee-odds (compute-melee-odds (:melee-form initial)))))
 
 (defonce app-state
@@ -60,13 +61,25 @@
   (if-let [odds (compute-melee-odds (:melee-form @app-state))]
     (swap! app-state assoc :melee-odds odds)))
 
+(defn simple-melee-option-checked [ks]
+  (let [orig-value (get-in @app-state ks)]
+    (swap! app-state assoc-in ks (not orig-value))
+    (recompute-melee)))
+
 (defn melee-attack-form []
-  [:div.flex.column
-   [ui/Subheader "Offensive Stats"]
-   [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
-   [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
-   [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
-   [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]])
+  (let [div-base
+        [:div.flex.column
+         [ui/Subheader "Offensive Stats"]
+         [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
+         [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
+         [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
+         [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]
+         [ui/Subheader "Offensive Options"]
+         [ui/Checkbox {:label "Poison Attacks"
+                       :checked (get-in @app-state [:melee-form :poison])
+                       :onCheck #(simple-melee-option-checked [:melee-form :poison])}]
+         ]]
+    div-base))
 
 (defn melee-defense-form[]
   [:div.flex.column
