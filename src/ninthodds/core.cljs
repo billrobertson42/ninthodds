@@ -91,21 +91,20 @@
       ]]))
 
 (defn melee-attack-form []
-  (let [div-base
-        [:div.flex.column
-         [ui/Subheader "Offensive Stats"]
-         [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
-         [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
-         [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
-         [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]
-         [ui/Subheader "Offensive Options"]
-         [reroll-component "Reroll Hits" [:melee-form :reroll-hits]]
-         [reroll-component "Reroll Wounds" [:melee-form :reroll-wounds]]
-         [ui/Checkbox {:label "Poison Attacks"
-                       :checked (get-in @app-state [:melee-form :poison])
-                       :onCheck #(simple-melee-option-checked [:melee-form :poison])}]
-         ]]
-    div-base))
+  [:div.flex.column
+   [ui/Subheader "Offensive Stats"]
+   [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
+   [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
+   [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
+   [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]
+   [ui/Subheader "Offensive Options"]
+   [reroll-component "Reroll Hits" [:melee-form :reroll-hits]]
+   [reroll-component "Reroll Wounds" [:melee-form :reroll-wounds]]
+   [:div.margin-top
+    [ui/Checkbox {:label "Poison Attacks"
+                  :checked (get-in @app-state [:melee-form :poison])
+                  :onCheck #(simple-melee-option-checked [:melee-form :poison])}]
+    ]])
 
 (defn melee-defense-form[]
   [:div.flex.column
