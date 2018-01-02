@@ -27,17 +27,14 @@ The program can do the following...
 * Has internal logic for rerolls
 * Has internal logic for poison attacks
 * Reasonable level of responsiveness (i.e. displays OK on computer or phone)
-
-## MVP Features (todo)
-
 * Provide user interface elements to activate poison and reroll logic
-* Wordsmith the UI a bit
 
 ## Future Features
 
 * Figure out additional feathres to make this a good tool for evaluating unit effectiveness
 * Current model is based on binomial distribution -- fine for fixed number of trials, how to expand?
 * Add shooting
+* Host it somewhere
 
 ### Using
 
