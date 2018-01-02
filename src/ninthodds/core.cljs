@@ -22,6 +22,8 @@
                  :melee-form
                  {:att "10" :off "3"  :str "3" :ap  ""
                   :def "3" :res "3"  :armor "" :special ""
+                  :reroll-hits :none :reroll-wounds :none
+                  :reroll-armor :none :reroll-special :none
                   :poison false}}]
     (assoc initial :melee-odds (compute-melee-odds (:melee-form initial)))))
 
@@ -66,6 +68,30 @@
     (swap! app-state assoc-in ks (not orig-value))
     (recompute-melee)))
 
+(defn set-reroll [ks value]
+  (println "set-reroll" ks value (keyword? value) (string? value) (number? value))
+  (swap! app-state assoc-in ks value)
+  (println (:melee-form @app-state))
+  (recompute-melee))
+
+(defn reroll-component [label ks]  
+  (let [value (get-in @app-state ks)]
+    [:div
+     [ui/SelectField {:floatingLabelText label
+                      :value value
+                      :onChange (fn [event key value]
+                                  (set-reroll ks (if (string? value) (keyword value) value)))}
+      [ui/MenuItem {:value :none :primaryText "No reroll"}]
+      [ui/MenuItem {:value :fail :primaryText "Reroll failures"}]
+      [ui/MenuItem {:value :success :primaryText "Reroll successes"}]
+      [ui/MenuItem {:value 1 :primaryText "Reroll ones"}]
+      [ui/MenuItem {:value 2 :primaryText "Reroll twos"}]
+      [ui/MenuItem {:value 3 :primaryText "Reroll threes"}]
+      [ui/MenuItem {:value 4 :primaryText "Reroll fours"}]
+      [ui/MenuItem {:value 5 :primaryText "Reroll fives"}]
+      [ui/MenuItem {:value 6 :primaryText "Reroll sixes"}]
+      ]]))
+
 (defn melee-attack-form []
   (let [div-base
         [:div.flex.column
@@ -75,11 +101,14 @@
          [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
          [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]
          [ui/Subheader "Offensive Options"]
+         [reroll-component "Reroll Hits" [:melee-form :reroll-hits]]
+         [reroll-component "Reroll Wounds" [:melee-form :reroll-wounds]]
          [ui/Checkbox {:label "Poison Attacks"
                        :checked (get-in @app-state [:melee-form :poison])
                        :onCheck #(simple-melee-option-checked [:melee-form :poison])}]
          ]]
     div-base))
+;;    (concat div-base )))
 
 (defn melee-defense-form[]
   [:div.flex.column
@@ -87,7 +116,12 @@
    [text-field "Defensive Skill" input/simple-number recompute-melee :melee-form :def]
    [text-field "Resilience" input/simple-number recompute-melee :melee-form :res]
    [text-field "Armor Save" input/armor-save recompute-melee :melee-form :armor]
-   [text-field "Special Save" input/special-save recompute-melee :melee-form :special]])
+   [text-field "Special Save" input/special-save recompute-melee :melee-form :special]
+   [ui/Subheader "Defensive Options"]
+   [reroll-component "Reroll Armor Save" [:melee-form :reroll-armor]]
+   [reroll-component "Reroll Special Save" [:melee-form :reroll-special]]
+   
+   ])
 
 (defn chart-data [odds]
   (clj->js
@@ -108,7 +142,7 @@
      [rc/BarChart {:data data :width 300 :height 250}
       [rc/XAxis {:dataKey "name"}]
       [rc/YAxis]
-      [rc/CartesianGrid {:strokeDasharray "5 5"}]
+      [rc/CartesianGrid {:strokeDasharray "3 3"}]
       [rc/Tooltip {:formatter format-tooltip}
        ]
       [rc/Bar {:dataKey "odds" :fill blue}]]]))

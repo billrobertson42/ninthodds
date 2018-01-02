@@ -16,6 +16,9 @@
 (defn special-save [value]
   (check-regex value #"[1-6]"))
 
+(defn reroll-specific [value]
+  (check-regex value #"[1-6]"))
+
 (defn parse-int [value]
   (if-not (str/blank? value) (js/parseInt value)))
 
