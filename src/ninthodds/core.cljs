@@ -69,9 +69,7 @@
     (recompute-melee)))
 
 (defn set-reroll [ks value]
-  (println "set-reroll" ks value (keyword? value) (string? value) (number? value))
   (swap! app-state assoc-in ks value)
-  (println (:melee-form @app-state))
   (recompute-melee))
 
 (defn reroll-component [label ks]  
@@ -108,7 +106,6 @@
                        :onCheck #(simple-melee-option-checked [:melee-form :poison])}]
          ]]
     div-base))
-;;    (concat div-base )))
 
 (defn melee-defense-form[]
   [:div.flex.column

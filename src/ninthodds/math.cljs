@@ -25,7 +25,6 @@
 (defn exact-odds
   "Given the set of numbers to be rerolled, what are the odds of getting a specific number"
   [required reroll-set]
-  (println "(exact-odds" required reroll-set ")")
   (if (reroll-set required)
     (/ (+ 1 (dec (count reroll-set))) 36.0)
     (/ (+ 6 (count reroll-set)) 36.0)))
