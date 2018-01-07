@@ -29,7 +29,7 @@
     (* hit-odds wound-odds)))
 
 (defn wound-p [stats]
-  (let [hit-on (hit-chart stats)
+  (let [hit-on (math/clamp (- (hit-chart stats) (or (:hit-modifier stats) 0)) 2 6)
         wound-on (wound-chart stats)]    
     (if (:poison stats)
       (poison-wound-odds (:reroll-hits stats) hit-on (:reroll-wounds stats) wound-on)

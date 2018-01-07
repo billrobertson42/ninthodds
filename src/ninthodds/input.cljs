@@ -11,16 +11,21 @@
   (check-regex value #"[0-9]+"))
 
 (defn armor-save [value]
-  (check-regex value #"[0-6]"))
+  (check-regex value #"[0-6]\+?"))
 
 (defn special-save [value]
-  (check-regex value #"[1-6]"))
+  (check-regex value #"[1-6]\+?"))
 
 (defn reroll-specific [value]
   (check-regex value #"[1-6]"))
 
-(defn parse-int [value]
-  (if-not (str/blank? value) (js/parseInt value)))
+(defn hit-modifier [value]
+  (check-regex value #"[-+]?[1-6]?"))
+
+(defn parse-int [^String value]
+  (if-not (str/blank? value)
+    (let [result (js/parseInt value)]
+      (if-not (js/isNaN result) result))))
 
 (defn default-vals [amap kvs]
   (let [[k default-value] kvs]
@@ -38,6 +43,8 @@
     (every? #(not (str/blank? %)) (vals subset))))
 
 (defn stats [melee-form]
-  (let [melee-form (default-vals melee-form [:ap 0 :armor 7 :special 7])]
+  (let [melee-form (default-vals melee-form [:ap 0 :armor 7 :special 7 :hit-modifier 0])]
     (if (required-present? melee-form [:att :off :str :ap :def :res])
-      (reduce #(update %1 %2 parse-int) melee-form [:att :off :str :ap :def :res :armor :special]))))
+      (reduce #(update %1 %2 parse-int)
+              melee-form
+              [:att :off :str :ap :def :res :armor :special :hit-modifier]))))

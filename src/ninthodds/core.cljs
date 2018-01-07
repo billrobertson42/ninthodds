@@ -24,6 +24,7 @@
                   :def "3" :res "3"  :armor "" :special ""
                   :reroll-hits :none :reroll-wounds :none
                   :reroll-armor :none :reroll-special :none
+                  :hit-modifier ""
                   :poison false}}]
     (assoc initial :melee-odds (compute-melee-odds (:melee-form initial)))))
 
@@ -93,10 +94,10 @@
 (defn melee-attack-form []
   [:div.flex.column
    [ui/Subheader "Offensive Stats"]
-   [text-field "Number of attacks" input/simple-number recompute-melee :melee-form :att]
    [text-field "Offensive Skill" input/simple-number recompute-melee :melee-form :off]
    [text-field "Strength" input/simple-number recompute-melee :melee-form :str]
    [text-field "Armor Penetration" input/simple-number recompute-melee :melee-form :ap]
+   [text-field "To Hit Modifier" input/hit-modifier recompute-melee :melee-form :hit-modifier]
    [ui/Subheader "Offensive Options"]
    [reroll-component "Reroll Hits" [:melee-form :reroll-hits]]
    [reroll-component "Reroll Wounds" [:melee-form :reroll-wounds]]
@@ -122,7 +123,7 @@
 (defn chart-data [odds]
   (clj->js
    (map (fn [[num-wounds o] datum]
-          {:name (str num-wounds " wound" (if (= 1 num-wounds) "" "s"))
+          {:name (str num-wounds " wound" (if (= 1 num-wounds) "" "s "))
            :odds (* 100 o)}) odds)))
 
 (defn format-tooltip [value]
@@ -137,11 +138,13 @@
      [ui/Subheader "Wounds in Melee"]
      [rc/BarChart {:data data :width 300 :height 250}
       [rc/XAxis {:dataKey "name"}]
-      [rc/YAxis]
+      [rc/YAxis {:width 40}]
       [rc/CartesianGrid {:strokeDasharray "3 3"}]
-      [rc/Tooltip {:formatter format-tooltip}
-       ]
-      [rc/Bar {:dataKey "odds" :fill blue}]]]))
+      [rc/Tooltip {:formatter format-tooltip}]
+      [rc/Bar {:dataKey "odds" :fill blue}]]
+     [ui/Subheader "Number of attacks"]
+     [text-field "" input/simple-number recompute-melee :melee-form :att]
+     ]))
 
 (defn melee[odds]
   [ui/Paper
